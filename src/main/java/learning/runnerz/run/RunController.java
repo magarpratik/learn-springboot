@@ -23,7 +23,13 @@ public class RunController {
 
     @GetMapping("/{id}")
     Run getById(@PathVariable Integer id) {
-        return runRepository.getById(id);
+        var run = runRepository.getById(id);
+
+        if (run.isEmpty()) {
+            throw new RunNotFoundException(id);
+        }
+
+        return run.get();
     }
 
     @PostMapping()
