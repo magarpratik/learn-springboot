@@ -17,13 +17,13 @@ public class RunController {
     }
 
     @GetMapping()
-    List<Run> getAll() {
-        return runRepository.getAll();
+    List<Run> findAll() {
+        return runRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    Run getById(@PathVariable Integer id) {
-        var run = runRepository.getById(id);
+    Run findById(@PathVariable Integer id) {
+        var run = runRepository.findById(id);
 
         if (run.isEmpty()) {
             throw new RunNotFoundException(id);
@@ -32,21 +32,26 @@ public class RunController {
         return run.get();
     }
 
+    @GetMapping("/locations/{location}")
+    List<Run> findByLocation(@PathVariable String location) {
+        return runRepository.findAllByLocation(location);
+    }
+
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     void create(@Valid @RequestBody Run run) {
-        runRepository.create(run);
+        runRepository.save(run);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void update(@RequestBody Run run, @PathVariable Integer id) {
-        runRepository.update(run, id);
+        runRepository.save(run);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void delete(@PathVariable Integer id) {
-        runRepository.delete(id);
+        runRepository.deleteById(id);
     }
 }
